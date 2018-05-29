@@ -28,7 +28,7 @@ def validate_contract_data(request, **kwargs):
 
 def validate_patch_contract_data(request, **kwargs):
     model = type(request.contract)
-    return validate_data(request, model)
+    return validate_data(request, model, container='contract')
 
 
 def validate_change_data(request, **kwargs):
