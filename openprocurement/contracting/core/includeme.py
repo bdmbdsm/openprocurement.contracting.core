@@ -9,10 +9,14 @@ from openprocurement.contracting.core.utils import (
 )
 from openprocurement.api.app import get_evenly_plugins
 from openprocurement.api.interfaces import IContentConfigurator
-from openprocurement.contracting.core.models import IContract
 from openprocurement.contracting.core.adapters import ContractConfigurator
-from openprocurement.contracting.core.utils import contract_from_data, extract_contract
 from openprocurement.contracting.core.design import add_design
+from openprocurement.contracting.core.models import IContract
+from openprocurement.contracting.core.utils import (
+    contract_from_data,
+    extract_contract,
+    extract_milestone,
+)
 
 
 PKG = get_distribution(__package__)
@@ -26,6 +30,7 @@ def includeme(config, plugin_map):
     add_design()
     config.add_request_method(extract_contract, 'contract', reify=True)
     config.add_request_method(contract_from_data)
+    config.add_request_method(extract_milestone, 'milestone', reify=True)
     config.scan("openprocurement.contracting.core.views")
     config.registry.contract_contractTypes = {}
     config.add_route_predicate('contractType', isContract)
