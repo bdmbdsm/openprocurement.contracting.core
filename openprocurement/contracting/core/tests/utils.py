@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from mock import MagicMock, patch
+from mock import MagicMock, Mock, patch
 from pyramid.exceptions import URLDecodeError
 from pyramid.request import Request
 from schematics.types import StringType
@@ -17,9 +17,11 @@ from openprocurement.contracting.core.utils import (
 from openprocurement.contracting.core.models import Contract as BaseContract
 from openprocurement.contracting.core.utils import (
     apply_patch,
+    extract_milestone,
     get_milestone_by_type,
     isContract,
     register_contract_contractType,
+    search_list_with_dicts,
     set_ownership,
 )
 
@@ -230,11 +232,55 @@ class TestApiFucntions(unittest.TestCase):
         self.assertEqual(save_contract(self.request), True)
 
 
+class TestSearchListWithDicts(unittest.TestCase):
+
+    def setUp(self):
+        self.container = (
+            {
+                'login': 'user1',
+                'password': 'qwerty123',
+            },
+            {
+                'login': 'user2',
+                'password': 'abcd321',
+                'other': 'I am User',
+            }
+        )
+
+    def test_successful_search(self):
+        result = search_list_with_dicts(self.container, 'login', 'user2')
+        assert result['other'] == 'I am User'
+
+    def test_unsuccessful_search(self):
+        result = search_list_with_dicts(self.container, 'login', 'user3')
+        assert result is None
+
+
+class TestExtractMilestone(unittest.TestCase):
+
+    @patch('openprocurement.contracting.core.utils.search_list_with_dicts')
+    def test_successful_extraction(self, search):
+        request = Mock()
+        request.contract = Mock()
+        milestone_id = 'mocked_milestone_id'
+        milestone = Mock()
+        milestone.id_ = milestone_id
+        request.matchdict.get.return_value = milestone_id
+        request.contract.get.return_value = [milestone]
+        search.return_value = milestone
+
+        result = extract_milestone(request)
+
+        assert result.id_ == milestone_id
+
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestisContract))
     suite.addTest(unittest.makeSuite(TestUtilsFucntions))
     suite.addTest(unittest.makeSuite(TestApiFucntions))
+    suite.addTest(unittest.makeSuite(TestSearchListWithDicts))
+    suite.addTest(unittest.makeSuite(TestExtractMilestone))
     return suite
 
 
