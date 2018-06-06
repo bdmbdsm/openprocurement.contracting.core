@@ -25,7 +25,6 @@ class Root(object):
 
 
 def factory(request):
-    from .utils import extract_milestone
     request.validated['contract_src'] = {}
     root = Root(request)
     if not request.matchdict or not request.matchdict.get('contract_id'):
@@ -35,7 +34,7 @@ def factory(request):
     contract.__parent__ = root
     request.validated['contract'] = request.validated['db_doc'] = contract
     if request.matchdict.get('milestone_id'):
-        return extract_milestone(request)
+        return get_item(contract, 'milestone', request)
     if request.method != 'GET':
         request.validated['contract_src'] = contract.serialize('plain')
     if request.matchdict.get('document_id'):

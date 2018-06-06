@@ -17,7 +17,6 @@ from openprocurement.contracting.core.utils import (
 from openprocurement.contracting.core.models import Contract as BaseContract
 from openprocurement.contracting.core.utils import (
     apply_patch,
-    extract_milestone,
     get_milestone_by_type,
     isContract,
     register_contract_contractType,
@@ -256,31 +255,12 @@ class TestSearchListWithDicts(unittest.TestCase):
         assert result is None
 
 
-class TestExtractMilestone(unittest.TestCase):
-
-    @patch('openprocurement.contracting.core.utils.search_list_with_dicts')
-    def test_successful_extraction(self, search):
-        request = Mock()
-        request.contract = Mock()
-        milestone_id = 'mocked_milestone_id'
-        milestone = Mock()
-        milestone.id_ = milestone_id
-        request.matchdict.get.return_value = milestone_id
-        request.contract.get.return_value = [milestone]
-        search.return_value = milestone
-
-        result = extract_milestone(request)
-
-        assert result.id_ == milestone_id
-
-
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestisContract))
     suite.addTest(unittest.makeSuite(TestUtilsFucntions))
     suite.addTest(unittest.makeSuite(TestApiFucntions))
     suite.addTest(unittest.makeSuite(TestSearchListWithDicts))
-    suite.addTest(unittest.makeSuite(TestExtractMilestone))
     return suite
 
 

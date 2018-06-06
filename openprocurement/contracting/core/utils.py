@@ -187,18 +187,3 @@ def search_list_with_dicts(container, key, value):
         found_value = item.get(key, False)
         if found_value and found_value == value:
             return item
-
-def extract_milestone(request):
-    contract = request.contract
-    milestone_id = request.matchdict.get('milestone_id')
-    milestones = contract.get('milestones')
-    if not milestones:
-        request.errors.add('url', 'contract_id', 'Contract has no milestones')
-        request.errors.status = 404
-        raise error_handler(request)
-    milestone = search_list_with_dicts(milestones, 'id_', milestone_id)
-    if not milestone:
-        request.errors.add('url', 'milestone_id', 'Milestone not found')
-        request.errors.status = 404
-        raise error_handler(request)
-    return milestone
