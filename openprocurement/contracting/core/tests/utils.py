@@ -20,7 +20,6 @@ from openprocurement.contracting.core.utils import (
     get_milestone_by_type,
     isContract,
     register_contract_contractType,
-    search_list_with_dicts,
     set_ownership,
 )
 
@@ -231,36 +230,11 @@ class TestApiFucntions(unittest.TestCase):
         self.assertEqual(save_contract(self.request), True)
 
 
-class TestSearchListWithDicts(unittest.TestCase):
-
-    def setUp(self):
-        self.container = (
-            {
-                'login': 'user1',
-                'password': 'qwerty123',
-            },
-            {
-                'login': 'user2',
-                'password': 'abcd321',
-                'other': 'I am User',
-            }
-        )
-
-    def test_successful_search(self):
-        result = search_list_with_dicts(self.container, 'login', 'user2')
-        assert result['other'] == 'I am User'
-
-    def test_unsuccessful_search(self):
-        result = search_list_with_dicts(self.container, 'login', 'user3')
-        assert result is None
-
-
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestisContract))
     suite.addTest(unittest.makeSuite(TestUtilsFucntions))
     suite.addTest(unittest.makeSuite(TestApiFucntions))
-    suite.addTest(unittest.makeSuite(TestSearchListWithDicts))
     return suite
 
 
