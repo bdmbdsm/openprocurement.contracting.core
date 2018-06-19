@@ -259,12 +259,15 @@ class TestValidationFucntions(unittest.TestCase):
             update_logging_context,
             validate_json_data,
         ):
+        update_logging_context.return_value = None
+        validate_json_data.return_value = None
         request = MagicMock()
-        validate_data.return_value
+        validate_data.return_value = True
         validate_contract_document(request)
 
     @patch('openprocurement.contracting.core.validation.validate_data')
     def test_validate_patch_contract_document(self, validate_data):
+        validate_data.return_value = True
         validate_patch_contract_document(MagicMock())
 
 
