@@ -51,3 +51,8 @@ class CeasefireContractDocumentResource(APIResource):
             return {
                 'data': document.serialize("view"),
             }
+
+    @json_view(
+        content_type="application/json")
+    def get(self):
+        return {'data': self.request.context.serialize("view")}
