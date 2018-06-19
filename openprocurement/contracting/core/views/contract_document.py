@@ -5,6 +5,7 @@ from openprocurement.api.utils import (
     context_unpack,
 )
 from openprocurement.contracting.core.utils import (
+    apply_patch,
     contractingresource,
     save_contract,
 )
@@ -16,6 +17,7 @@ from openprocurement.contracting.core.constants import (
 )
 from openprocurement.contracting.core.validation import (
     validate_contract_document,
+    validate_patch_contract_document,
 )
 
 
@@ -52,7 +54,27 @@ class CeasefireContractDocumentResource(APIResource):
                 'data': document.serialize("view"),
             }
 
-    @json_view(
-        content_type="application/json")
+    @json_view(content_type="application/json")
     def get(self):
         return {'data': self.request.context.serialize("view")}
+
+    @json_view(
+            content_type="application/json",
+            validators=(validate_patch_contract_document,))
+    def patch(self):
+        document = self.request.context
+        manager = self.request.registry.getAdapter(document, IDocumentManager)
+        manager.change_document(self.request)
+        if apply_patch(self.request):
+            self.LOGGER.info(
+                'Updated ceasefire contract document. '
+                'contractID: {0} documentID: {1}'.format(
+                    self.request.context.__parent__.id,
+                    self.request.context.id,
+                ),
+                extra=context_unpack(
+                    self.request,
+                    {'MESSAGE_ID': 'ceasefire_contract_document_patch'}
+                    )
+                )
+            return {'data': self.request.context.serialize('view')}

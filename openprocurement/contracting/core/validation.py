@@ -136,3 +136,6 @@ def validate_contract_document(request, **kwargs):
     update_logging_context(request, {'document_id': '__new__'})
     data = request.validated['json_data'] = validate_json_data(request)
     return validate_data(request, Document, "document", data=data)
+
+def validate_patch_contract_document(request, **kwargs):
+    return validate_data(request, Document)
