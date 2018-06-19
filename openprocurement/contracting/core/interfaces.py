@@ -27,3 +27,7 @@ class IDocumentManager(Interface):
 
     def change_document(self, request, **kwargs):
         raise NotImplementedError
+
+
+class IDocument(Interface):
+    pass
