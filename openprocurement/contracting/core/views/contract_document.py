@@ -29,7 +29,8 @@ class CeasefireContractDocumentResource(APIResource):
 
     @json_view(
         content_type="application/json",
-        validators=(validate_contract_document,))
+        validators=(validate_contract_document,),
+        permission='create_contract')
     def collection_post(self):
         document = self.request.validated['document']
         manager = self.request.registry.getAdapter(document, IDocumentManager)
@@ -54,13 +55,14 @@ class CeasefireContractDocumentResource(APIResource):
                 'data': document.serialize("view"),
             }
 
-    @json_view(content_type="application/json")
+    @json_view(content_type="application/json", permission='view_listing')
     def get(self):
         return {'data': self.request.context.serialize("view")}
 
     @json_view(
             content_type="application/json",
-            validators=(validate_patch_contract_document,))
+            validators=(validate_patch_contract_document,),
+            permission='edit_contract')
     def patch(self):
         document = self.request.context
         manager = self.request.registry.getAdapter(document, IDocumentManager)
