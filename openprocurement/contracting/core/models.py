@@ -34,9 +34,6 @@ from openprocurement.auctions.core.models import (
     flashItem,
     plain_role,
 )
-from openprocurement.contracting.core.interfaces import (
-    IDocument,
-)
 
 contract_create_role = (whitelist(
     'auction_id',
@@ -134,7 +131,6 @@ def get_contract(model):
     return model
 
 
-@implementer(IDocument)
 class Document(BaseDocument):
     """ Contract Document """
     documentOf = StringType(required=True, choices=[

@@ -10,7 +10,7 @@ from openprocurement.contracting.core.utils import (
     save_contract,
 )
 from openprocurement.contracting.core.interfaces import (
-    IDocumentManager,
+    IContractManager,
 )
 from openprocurement.contracting.core.constants import (
     ENDPOINTS,
@@ -32,20 +32,21 @@ class CeasefireContractDocumentResource(APIResource):
         validators=(validate_contract_document,),
         permission='create_contract')
     def collection_post(self):
+        contract = self.request.validated['contract']
         document = self.request.validated['document']
-        manager = self.request.registry.getAdapter(document, IDocumentManager)
+        manager = self.request.registry.getAdapter(contract, IContractManager).document_manager()
         manager.create_document(self.request)
         if save_contract(self.request):
             self.LOGGER.info(
                 'Created contract document. contract ID: {0} documentID: {1}'.format(
-                    document.__parent__.id,
+                    contract.id,
                     document.id
                 ),
                 extra=context_unpack(
                     self.request,
                     {'MESSAGE_ID': 'contract_document_create'},
                     {
-                        'contract_id': document.__parent__.id,
+                        'contract_id': contract.id,
                         'document_id': document.id
                     }
                 )
@@ -64,19 +65,22 @@ class CeasefireContractDocumentResource(APIResource):
             validators=(validate_patch_contract_document,),
             permission='edit_contract')
     def patch(self):
+        contract = self.request.validated['contract']
         document = self.request.context
-        manager = self.request.registry.getAdapter(document, IDocumentManager)
+        manager = self.request.registry.getAdapter(contract, IContractManager).document_manager()
+        manager.change_document(self.request)
+
         manager.change_document(self.request)
         if apply_patch(self.request):
             self.LOGGER.info(
                 'Updated ceasefire contract document. '
                 'contractID: {0} documentID: {1}'.format(
-                    self.request.context.__parent__.id,
-                    self.request.context.id,
+                    contract.id,
+                    document.id,
                 ),
                 extra=context_unpack(
                     self.request,
                     {'MESSAGE_ID': 'ceasefire_contract_document_patch'}
                     )
                 )
-            return {'data': self.request.context.serialize('view')}
+            return {'data': document.serialize('view')}
