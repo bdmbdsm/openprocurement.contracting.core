@@ -137,11 +137,26 @@ def get_contract(model):
 
 class Document(BaseDocument):
     """ Contract Document """
+    documentType_choices = (
+        'approvalProtocol',
+        'conflictOfInterest',
+        'contractAnnexe',
+        'contractArrangements',
+        'contractGuarantees',
+        'contractNotice',
+        'contractSchedule',
+        'contractSigned',
+        'debarments',
+        'registerExtract',
+        'rejectionProtocol',
+        'subContract',
+    )
     documentOf = StringType(
         required=True,
         choices=['tender', 'item', 'lot', 'contract', 'change', 'milestone'],
         default='contract'
     )
+    documentType = StringType(choices=documentType_choices)
 
     def validate_relatedItem(self, data, relatedItem):
         if not relatedItem and data.get('documentOf') in ['item', 'change', 'milestone']:
