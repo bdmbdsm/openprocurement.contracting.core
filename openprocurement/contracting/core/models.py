@@ -2,8 +2,8 @@
 from uuid import uuid4
 from zope.interface import implementer, Interface
 from pyramid.security import Allow
-from schematics.types import StringType, BaseType, MD5Type
-from schematics.types.compound import ModelType, DictType
+from schematics.types import StringType, MD5Type
+from schematics.types.compound import ModelType
 from schematics.types.serializable import serializable
 from schematics.exceptions import ValidationError
 from schematics.transforms import whitelist, blacklist
@@ -36,8 +36,6 @@ from openprocurement.auctions.core.models import (
 )
 
 contract_create_role = (whitelist(
-    # 'auction_id', # TODO: Move to common contract
-    #'auction_token', # TODO: Move to common contract
     'relatedProcessID',
     'merchandisingObject',
     'transfer_token',
@@ -80,7 +78,6 @@ contract_edit_role = (whitelist(
 
 contract_view_role = (whitelist(
     'amountPaid',
-    # 'auction_id', # TODO: Move to common contract
     'relatedProcessID',
     'merchandisingObject',
     'awardID',
@@ -258,8 +255,6 @@ class Contract(BaseResourceItem, BaseContract):
     dateModified = IsoDateTimeType()
     items = ListType(ModelType(flashItem), required=False, min_size=1, validators=[validate_items_uniq])
     relatedProcessID = StringType()
-    #auction_token = StringType(required=True) # TODO: Move to common contract
-    #auction_id = StringType(required=True) # TODO: Move to common contract
     owner_token = StringType(default=lambda: uuid4().hex)
     owner = StringType()
     status = StringType(choices=['terminated', 'active'], default='active')
@@ -274,7 +269,7 @@ class Contract(BaseResourceItem, BaseContract):
     amountPaid = ModelType(Value)
     terminationDetails = StringType()
 
-    create_accreditation = 3  # TODO
+    create_accreditation = 3
 
     class Options:
         roles = {
@@ -288,12 +283,10 @@ class Contract(BaseResourceItem, BaseContract):
         }
 
     def __local_roles__(self):
-        #('{}_{}'.format(self.owner, self.auction_token), 'auction_owner') # TODO: Move to common contract
         return dict([('{}_{}'.format(self.owner, self.owner_token), 'contract_owner')])
 
     def __acl__(self):
 
-        #(Allow, '{}_{}'.format(self.owner, self.auction_token), 'generate_credentials') # TODO: Move to common contract
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_contract'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_contract_documents')
