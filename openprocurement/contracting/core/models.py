@@ -269,7 +269,7 @@ class Contract(BaseResourceItem, BaseContract):
     amountPaid = ModelType(Value)
     terminationDetails = StringType()
 
-    create_accreditation = 3
+    create_accreditation = 3  # TODO
 
     class Options:
         roles = {
