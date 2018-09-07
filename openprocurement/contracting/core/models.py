@@ -30,10 +30,10 @@ from openprocurement.api.models.common import (
     ContactPoint as BaseContactPoint,
 )
 from openprocurement.api.models.roles import (
+    Administrator_role,
     plain_role,
 )
 from openprocurement.auctions.core.models import (
-    Administrator_role,
     flashItem,
 )
 
