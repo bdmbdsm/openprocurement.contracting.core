@@ -2,8 +2,7 @@
 import logging
 from pyramid.config import Configurator
 
-from openprocurement.api.utils import get_now
-from openprocurement.auctions.core.utils import get_plugins
+from openprocurement.api.utils import get_now, get_plugins
 from openprocurement.contracting.core.models import Contract
 from openprocurement.contracting.core.traversal import Root
 
