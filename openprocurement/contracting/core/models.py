@@ -29,10 +29,12 @@ from openprocurement.api.models.common import (
     BaseResourceItem,
     ContactPoint as BaseContactPoint,
 )
+from openprocurement.api.models.roles import (
+    plain_role,
+)
 from openprocurement.auctions.core.models import (
     Administrator_role,
     flashItem,
-    plain_role,
 )
 
 contract_create_role = (whitelist(
