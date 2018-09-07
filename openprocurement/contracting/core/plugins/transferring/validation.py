@@ -11,4 +11,4 @@ from openprocurement.api.utils import (
 def validate_change_ownership_accreditation(request, **kwargs):  # pylint: disable=unused-argument
     levels = get_resource_accreditation(request, 'contract', request.context, 'create')
     err_msg = 'Broker Accreditation level does not permit ownership change'
-    validate_accreditation_level(request, request.validated['contract'], levels)
+    validate_accreditation_level(request, request.validated['contract'], levels, err_msg)
