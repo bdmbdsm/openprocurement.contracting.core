@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from zope.interface import Interface
+from openprocurement.api.interfaces import (
+    IResourceManager,
+)
 
 
-class IContractManager(Interface):
+class IContractManager(IResourceManager):
 
     def create_contract(self, request, **kwargs):
         raise NotImplementedError
@@ -11,7 +13,7 @@ class IContractManager(Interface):
         raise NotImplementedError
 
 
-class IMilestoneManager(Interface):
+class IMilestoneManager(IResourceManager):
 
     def create_milestones(self, request, **kwargs):
         raise NotImplementedError
@@ -20,7 +22,7 @@ class IMilestoneManager(Interface):
         raise NotImplementedError
 
 
-class IDocumentManager(Interface):
+class IDocumentManager(IResourceManager):
 
     def create_document(self, request, **kwargs):
         raise NotImplementedError

@@ -7,7 +7,7 @@ from pyramid.compat import decode_path_info
 from pyramid.exceptions import URLDecodeError
 from schematics.exceptions import ModelValidationError
 
-from openprocurement.api.utils import (
+from openprocurement.api.utils import (  # noqa
     apply_data_patch,
     context_unpack,
     error_handler,
@@ -19,6 +19,7 @@ from openprocurement.api.utils import (
 )
 from openprocurement.api.models.auction_models import Revision
 from openprocurement.contracting.core.traversal import factory
+from openprocurement.api.plugins.related_processes import add_related_processes_views  # noqa: forwarded import
 
 
 PKG = get_distribution(__package__)

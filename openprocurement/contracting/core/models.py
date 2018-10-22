@@ -21,6 +21,7 @@ from openprocurement.api.models.schema import (
     flashItem,
     Model,
     Organization as BaseOrganization,
+    RelatedProcess,
     Revision,
     Value,
     schematics_default_role,

@@ -44,5 +44,7 @@ def factory(request):
         return get_item(contract, 'document', request)
     if request.matchdict.get('change_id'):
         return get_item(contract, 'change', request)
+    if request.matchdict.get('relatedProcess_id'):
+        return get_item(contract, 'relatedProcess', request)
     request.validated['id'] = request.matchdict['contract_id']
     return contract

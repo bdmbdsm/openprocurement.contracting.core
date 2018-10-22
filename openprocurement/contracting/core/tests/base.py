@@ -9,6 +9,7 @@ from schematics.types import StringType
 from schematics.types.compound import ModelType
 from uuid import uuid4
 
+from openprocurement.api.tests.blanks.related_processes import RelatedProcessesTestMixinBase  # noqa: import forward
 from openprocurement.api.utils import connection_mock_config
 from openprocurement.api.models.auction_models import (
     Contract as BaseContract,
