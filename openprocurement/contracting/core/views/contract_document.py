@@ -5,7 +5,10 @@ from openprocurement.api.utils import (
     context_unpack,
     get_file,
 )
-from openprocurement.api.validation import validate_file_upload
+from openprocurement.api.validation import (
+    validate_file_update,
+    validate_file_upload,
+)
 from openprocurement.contracting.core.utils import (
     apply_patch,
     contractingresource,
@@ -88,3 +91,32 @@ class CeasefireContractDocumentResource(APIResource):
                     )
                 )
             return {'data': document.serialize('view')}
+
+    @json_view(
+        content_type="application/json",
+        validators=(validate_file_update,),
+        permission='edit_contract')
+    def put(self):
+        contract = self.request.context.__parent__
+        document = self.request.validated['document']
+        manager = self.request.registry.getAdapter(contract, IContractManager).document_manager()
+        manager.put_document(self.request)
+        if save_contract(self.request):
+            self.LOGGER.info(
+                'Created contract document. contract ID: {0} documentID: {1}'.format(
+                    contract.id,
+                    document.id
+                ),
+                extra=context_unpack(
+                    self.request,
+                    {'MESSAGE_ID': 'contract_document_create'},
+                    {
+                        'contract_id': contract.id,
+                        'document_id': document.id
+                    }
+                )
+            )
+            self.request.response.status = 200
+            return {
+                'data': document.serialize("view"),
+            }
