@@ -135,7 +135,10 @@ def get_contract(model):
 class Document(BaseDocument):
     """ Contract Document """
     documentType_choices = (
+        'act',
+        'admissionProtocol',
         'approvalProtocol',
+        'auctionProtocol',
         'conflictOfInterest',
         'contractAnnexe',
         'contractArrangements',
@@ -148,6 +151,7 @@ class Document(BaseDocument):
         'registerExtract',
         'rejectionProtocol',
         'subContract',
+        'winningBid',
     )
     documentOf = StringType(
         required=True,
