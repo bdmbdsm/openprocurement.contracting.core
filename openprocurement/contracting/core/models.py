@@ -135,6 +135,7 @@ def get_contract(model):
 class Document(BaseDocument):
     """ Contract Document """
     documentType_choices = (
+        'act',
         'approvalProtocol',
         'conflictOfInterest',
         'contractAnnexe',
