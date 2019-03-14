@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from pyramid.threadlocal import get_current_registry
 
-from openprocurement.api.utils.model_discovery import ModelDiscoverer
+from openprocurement.api.utils.model_discovery import ModelDiscovery
 from openprocurement.contracting.core.utils import get_contract_types
 from openprocurement.contracting.core.constants import DEFAULT_CONTRACT_TYPE
 
 
-class ContractingModelDiscoverer(ModelDiscoverer):
+class ContractingModelDiscovery(ModelDiscovery):
 
     _contract_type_field_name = 'contractType'
 
