@@ -15,16 +15,14 @@ from openprocurement.api.utils import (
     get_now,
     get_revision_changes,
     set_modetest_titles,
-    get_evenly_plugins,
 )
 from openprocurement.api.models.auction_models import Revision
 from openprocurement.contracting.core.traversal import factory
+from openprocurement.contracting.core.constants import DEFAULT_CONTRACT_TYPE
 
 
 PKG = get_distribution(__package__)
 LOGGER = getLogger(PKG.project_name)
-
-DEFAULT_CONTRACT_TYPE = "common"
 
 contractingresource = partial(
     resource,
