@@ -19,7 +19,13 @@ from openprocurement.contracting.core.design import (
     contracts_real_by_local_seq_view,
     contracts_test_by_local_seq_view,
 )
+from openprocurement.contracting.core.interfaces import (
+    IContractManager,
+)
 from openprocurement.contracting.core.validation import validate_contract_data
+from openprocurement.api.utils.validation import validate_data_to_event
+from openprocurement.api.utils.data_engine import DataEngine
+from openprocurement.contracting.core.manager_discovery import ContractManagerDiscovery
 
 VIEW_MAP = {
     u'': contracts_real_by_dateModified_view,
@@ -57,13 +63,17 @@ class ContractsResource(APIResourceListing):
         self.log_message_id = 'contract_list_custom'
 
     @json_view(content_type="application/json", permission='create_contract',
-               validators=(validate_contract_data,))
+               validators=(validate_data_to_event,))
     def post(self):
-        contract = self.request.validated['contract']
-        for i in self.request.validated['json_data'].get('documents', []):
-            doc = type(contract).documents.model_class(i)
-            doc.__parent__ = contract
-            contract.documents.append(doc)
+        event = self.request.event
+        import ipdb; ipdb.set_trace()
+        md = ContractManagerDiscovery(self.request.registry.manager_registry)
+        manager = md.discover(event.data)(event)
+        manager.create_contract()
+#        for i in self.request.event.data.get('documents', []):
+#            doc = type(contract).documents.model_class(i)
+#            doc.__parent__ = contract
+#            contract.documents.append(doc)
 
         acc = set_ownership(contract, self.request)
         self.request.validated['contract'] = contract
