@@ -70,10 +70,6 @@ class ContractsResource(APIResourceListing):
         md = ContractManagerDiscovery(self.request.registry.manager_registry)
         manager = md.discover(event.data)(event)
         manager.create_contract()
-#        for i in self.request.event.data.get('documents', []):
-#            doc = type(contract).documents.model_class(i)
-#            doc.__parent__ = contract
-#            contract.documents.append(doc)
 
         acc = set_ownership(contract, self.request)
         self.request.validated['contract'] = contract

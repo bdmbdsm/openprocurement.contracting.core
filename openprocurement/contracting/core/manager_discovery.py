@@ -11,7 +11,6 @@ class ContractManagerDiscovery(ManagerDiscovery):
         self._manager_registry = manager_registry
 
     def discover(self, data):
-        import ipdb; ipdb.set_trace()
         contract_type_name = data.get(self._contract_type_field_name, DEFAULT_CONTRACT_TYPE)
 
         manager = self._manager_registry.get_manager(contract_type_name)
