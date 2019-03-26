@@ -66,20 +66,17 @@ class ContractsResource(APIResourceListing):
                validators=(validate_data_to_event,))
     def post(self):
         event = self.request.event
-        import ipdb; ipdb.set_trace()
         md = ContractManagerDiscovery(self.request.registry.manager_registry)
         manager = md.discover(event.data)(event)
-        manager.create_contract()
+        self.request.response.status = 201
+        return manager.create_contract()
 
-        acc = set_ownership(contract, self.request)
-        self.request.validated['contract'] = contract
-        self.request.validated['contract_src'] = {}
-        if save_contract(self.request):
-            self.LOGGER.info('Created contract {} ({})'.format(contract.id, contract.contractID),
-                             extra=context_unpack(self.request, {'MESSAGE_ID': 'contract_create'},
-                                                  {'contract_id': contract.id, 'contractID': contract.contractID or ''}))
-            self.request.response.status = 201
-            return {
-                'data': contract.serialize("view"),
-                'access': acc,
-            }
+        # if save_contract(self.request):
+        #     self.LOGGER.info('Created contract {} ({})'.format(contract.id, contract.contractID),
+        #                      extra=context_unpack(self.request, {'MESSAGE_ID': 'contract_create'},
+        #                                           {'contract_id': contract.id, 'contractID': contract.contractID or ''}))
+        #     self.request.response.status = 201
+        #     return {
+        #         'data': contract.serialize("view"),
+        #         'access': acc,
+        #     }
