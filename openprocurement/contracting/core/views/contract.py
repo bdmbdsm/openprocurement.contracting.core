@@ -67,9 +67,9 @@ class ContractsResource(APIResourceListing):
     def post(self):
         event = self.request.event
         md = ContractManagerDiscovery(self.request.registry.manager_registry)
-        manager = md.discover(event.data)(event)
+        manager = md.discover(event.data)()
         self.request.response.status = 201
-        return manager.create_contract()
+        return manager.create_contract(event)
 
         # if save_contract(self.request):
         #     self.LOGGER.info('Created contract {} ({})'.format(contract.id, contract.contractID),
