@@ -4,7 +4,7 @@ from openprocurement.api.utils import (
     raise_operation_error,
     update_logging_context,
 )
-from openprocurement.contracting.core.models import Change, Document
+from openprocurement.contracting.core.models import Change, ContractDocument
 
 from openprocurement.api.validation import (
     validate_accreditations,
@@ -138,7 +138,8 @@ def validate_add_document_to_active_change(request, **kwargs):
 def validate_contract_document(request, **kwargs):
     update_logging_context(request, {'document_id': '__new__'})
     data = request.validated['json_data'] = validate_json_data(request)
-    return validate_data(request, Document, "document", data=data)
+    return validate_data(request, ContractDocument, "document", data=data)
+
 
 def validate_patch_contract_document(request, **kwargs):
-    return validate_data(request, Document)
+    return validate_data(request, ContractDocument)

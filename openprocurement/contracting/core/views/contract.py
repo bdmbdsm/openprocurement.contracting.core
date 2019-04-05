@@ -24,7 +24,7 @@ from openprocurement.contracting.core.interfaces import (
 )
 from openprocurement.contracting.core.validation import validate_contract_data
 from openprocurement.api.utils.validation import validate_data_to_event
-from openprocurement.api.utils.data_engine import DataEngine
+from openprocurement.api.utils.error_management import handle_errors_on_view
 from openprocurement.contracting.core.manager_discovery import ContractManagerDiscovery
 
 VIEW_MAP = {
@@ -64,6 +64,7 @@ class ContractsResource(APIResourceListing):
 
     @json_view(content_type="application/json", permission='create_contract',
                validators=(validate_data_to_event,))
+    @handle_errors_on_view
     def post(self):
         event = self.request.event
         md = ContractManagerDiscovery(self.request.registry.manager_registry)
