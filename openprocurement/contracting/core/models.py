@@ -132,8 +132,7 @@ def get_contract(model):
     return model
 
 
-class Document(BaseDocument):
-    """ Contract Document """
+class ContractDocument(BaseDocument):
     documentType_choices = (
         'act',
         'admissionProtocol',
@@ -172,6 +171,9 @@ class Document(BaseDocument):
                 raise ValidationError(u"relatedItem should be one of items")
             if data.get('documentOf') == 'milestone' and relatedItem not in [i.id for i in contract.milestones]:
                 raise ValidationError(u"relatedItem should be one of milestones")
+
+    def get_role(self, auth_role):
+        return 'Administrator' if auth_role == 'Administrator' else 'edit'
 
 
 class ContactPoint(BaseContactPoint):
@@ -271,7 +273,7 @@ class Contract(BaseResourceItem, BaseContract):
     '''
     procuringEntity = ModelType(ProcuringEntity, required=True)
     changes = ListType(ModelType(Change), default=list())
-    documents = ListType(ModelType(Document), default=list())
+    documents = ListType(ModelType(ContractDocument), default=list())
     amountPaid = ModelType(Value)
     terminationDetails = StringType()
 
