@@ -39,7 +39,7 @@ def factory(request):
     if request.matchdict.get('milestone_id'):
         return get_item(contract, 'milestone', request)
     if request.method != 'GET':
-        request.validated['contract_src'] = contract.serialize('plain')
+        request.validated['global_ctx_plain'] = contract.serialize('plain')
     if request.matchdict.get('document_id'):
         return get_item(contract, 'document', request)
     if request.matchdict.get('change_id'):
