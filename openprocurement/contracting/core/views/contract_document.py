@@ -10,7 +10,7 @@ from openprocurement.contracting.core.utils import (
 from openprocurement.contracting.core.constants import (
     ENDPOINTS,
 )
-from openprocurement.api.utils.validation import validate_data_to_event
+from openprocurement.api.validation import validate_data_to_event
 from openprocurement.contracting.core.manager_discovery import ContractManagerDiscovery
 from openprocurement.api.utils.documents import DocumentUploadReader
 from openprocurement.api.utils.error_management import handle_errors_on_view

@@ -16,7 +16,7 @@ from openprocurement.contracting.core.design import (
     contracts_real_by_local_seq_view,
     contracts_test_by_local_seq_view,
 )
-from openprocurement.api.utils.validation import validate_data_to_event
+from openprocurement.api.validation import validate_data_to_event
 from openprocurement.api.utils.error_management import handle_errors_on_view
 from openprocurement.contracting.core.manager_discovery import ContractManagerDiscovery
 
